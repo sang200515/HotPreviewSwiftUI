@@ -70,14 +70,14 @@ public enum PreviewDevices: String {
 }
 
 @available(iOS 13.0, OSX 10.15, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, *)
-extension View {
+public extension View {
     var idiom: UIUserInterfaceIdiom  { UIDevice.current.userInterfaceIdiom }
-    func previewDevice(device: PreviewDevices) -> some View {
+    public func previewDevice(device: PreviewDevices) -> some View {
         previewDevice(PreviewDevice(rawValue: device.previewDevice))
             .previewDisplayName(device.previewDisplayName)
     }
 
-    func previewIpad(device: PreviewDevices = .iPadPro3rdGen, orientations: [InterfaceOrientation] = [ .portrait, .landscapeLeft]) -> some View {
+    public func previewIpad(device: PreviewDevices = .iPadPro3rdGen, orientations: [InterfaceOrientation] = [ .portrait, .landscapeLeft]) -> some View {
         ForEach(0..<2, id: \.self) { index2 in
             previewDevice(PreviewDevice(rawValue: device.previewDevice))
                 .previewDisplayName(device.previewDisplayName)
@@ -86,7 +86,7 @@ extension View {
 
     }
 
-    func previewIPhone(device: PreviewDevices = .iPhone13, orientations: [InterfaceOrientation] = [ .portrait, .landscapeLeft]) -> some View {
+    public func previewIPhone(device: PreviewDevices = .iPhone13, orientations: [InterfaceOrientation] = [ .portrait, .landscapeLeft]) -> some View {
         ForEach(0..<2, id: \.self) { index2 in
             previewDevice(PreviewDevice(rawValue: device.previewDevice))
                 .previewDisplayName(device.previewDisplayName)
@@ -95,7 +95,7 @@ extension View {
     }
 
     @ViewBuilder
-    func previewDevicesNecessary(
+    public func previewDevicesNecessary(
         devices: [PreviewDevices] = [
             .iPhone13,
             .iPhoneSE3rdGen,
@@ -528,7 +528,7 @@ struct DebugOverlayModifier: ViewModifier {
                     .offset(x: contentSize.width / 2 + 100)
                 }
             })
-            .readSize { size in
+            .readSize1 { size in
                 contentSize = size
             }
     }
@@ -540,8 +540,8 @@ struct RandomColor: ViewModifier {
     }
 }
 
-extension Color {
-    static var random: Color {
+public extension Color {
+    public static var random: Color {
         return Color(
             red: .random(in: 0...1),
             green: .random(in: 0...1),
@@ -551,25 +551,25 @@ extension Color {
 }
 
 
-extension View {
+public extension View {
     func debugOverlay() -> some View {
         self.modifier(DebugOverlayModifier())
     }
-    func debugBackground() -> some View {
+     func debugBackground() -> some View {
         self.modifier(RandomColor())
     }
-    func previewResizable() -> some View {
+     func previewResizable() -> some View {
         modifier(PreviewResizableViewModifier())
             .previewIpad()
     }
 }
-class DebugDataSource: ObservableObject {
-    static let shared = DebugDataSource()
-    @Published var isDragging: Bool = false
-    @Published var isPortrait: Bool = true
-    @Published var isFitting: Bool = false
-    @Published var viewSize: CGSize = UIScreen.main.bounds.size
-    @Published var isPadUI: Bool = false
+public class DebugDataSource: ObservableObject {
+    public static let shared = DebugDataSource()
+    @Published public var isDragging: Bool = false
+    @Published public var isPortrait: Bool = true
+    @Published public var isFitting: Bool = false
+    @Published public var viewSize: CGSize = UIScreen.main.bounds.size
+    @Published public var isPadUI: Bool = false
     func updateSize(_ size: CGSize) {
         viewSize = size
         isPadUI = viewSize.width > 435 || viewSize.height > 937
@@ -581,12 +581,12 @@ class DebugDataSource: ObservableObject {
     private var randomOneImageID: String { "\((1...1000).randomElement() ?? 1)"}
     private var randomWidth: String { "\(randomeSize.randomElement() ?? 1)" }
     private var randomHeight: String { "\(randomeSize.randomElement() ?? 1)" }
-    var randomURL: URL {
+    public var randomURL: URL {
         let url: URL = URL(string: "https://picsum.photos/id/\(randomImageID)/\(randomWidth)/\(randomHeight)")!
         print(url.absoluteString)
         return url
     }
-    var randomOneURL: URL {
+    public var randomOneURL: URL {
         let url: URL = URL(string: "https://picsum.photos/id/\(randomOneImageID)/\(randomWidth)/\(randomHeight)")!
         print(url.absoluteString)
         return url
@@ -597,12 +597,12 @@ class DebugDataSource: ObservableObject {
 
     //MARK: String ✅
      private let paragraph = "これは例文です。この例文をテスト用に、より意味のある別の文にこれは例文です。この例文をテスト用に、より意味のある別の文にこれは例文です。この例文をテスト用に、より意味のある別の文にこれは例文です。この例文をテスト用に、より意味のある別の文にこれは例文です。この例文をテスト用に、より意味のある別の文にこれは例文です。この例文をテスト用に、より意味のある別の文に"
-    func randomString(_ length: Int) -> String {
+    public func randomString(_ length: Int) -> String {
         let randomCount: Int = (0...length).randomElement() ?? 1
         return String(String((0..<randomCount).map { _ in paragraph.randomElement() ?? String.Element("test")}))
     }
 
-    func randomStringOptional(_ length: Int) -> String? {
+    public func randomStringOptional(_ length: Int) -> String? {
         let randomCount: Int = (0...length).randomElement() ?? 1
         let listValue:[String?] = [nil,nil,nil, String((0..<randomCount).map { _ in paragraph.randomElement() ?? String.Element("sai logic roi")})]
         return listValue.randomElement() ?? nil
@@ -610,15 +610,15 @@ class DebugDataSource: ObservableObject {
     //MARK: Bool ✅
        private let listRandom: [Bool] = [true, false]
        private let listRandomOptional: [Bool?] = [nil,true, false]
-    var randomBool : Bool {  listRandom.randomElement() ?? false }
-    var randomBoolOptional : Bool? {  listRandomOptional.randomElement() ?? nil }
+    public var randomBool : Bool {  listRandom.randomElement() ?? false }
+    public var randomBoolOptional : Bool? {  listRandomOptional.randomElement() ?? nil }
 
 }
 
 import SwiftUI
 
 extension View {
-  func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+  func readSize1(onChange: @escaping (CGSize) -> Void) -> some View {
     background(
       GeometryReader { geometryProxy in
         Color.clear
