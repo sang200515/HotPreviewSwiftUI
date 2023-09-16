@@ -552,13 +552,13 @@ public extension Color {
 
 
 public extension View {
-    func debugOverlay() -> some View {
+    public func debugOverlay() -> some View {
         self.modifier(DebugOverlayModifier())
     }
-     func debugBackground() -> some View {
+    public func debugBackground() -> some View {
         self.modifier(RandomColor())
     }
-     func previewResizable() -> some View {
+     public func previewResizable() -> some View {
         modifier(PreviewResizableViewModifier())
             .previewIpad()
     }
